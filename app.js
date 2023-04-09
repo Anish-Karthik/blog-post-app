@@ -16,10 +16,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 const posts = [];
+var idnum = 1;
 
 app.get('/', (req, res) => {
-  console.log(posts);
-  res.render('home', {homeStartingContent: homeStartingContent});
+  res.render('home', {homeStartingContent: homeStartingContent, posts: posts});
 });
 
 app.get('/about', (req, res) => {
@@ -34,15 +34,23 @@ app.get('/compose', (req, res) => {
   res.render('compose');
 });
 
+app.get('/pageNotFound', (req, res) => {
+  res.render('notFound');
+});
 app.post('/compose', (req, res) => {
   var post = {  
     title: req.body.postTitle,
-    content: req.body.postBody
+    content: req.body.postBody,
+    id: idnum++
   };
   posts.push(post);
   res.redirect('/');
 });
 
+app.get('/posts/:postName', (req, res) => {
+  console.log(req.params.postName);
+  res.render('post');
+});
 
 
 
